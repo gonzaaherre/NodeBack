@@ -21,5 +21,12 @@ const validatorCreateItem = [
     return validatorResults(req, res, next);
   },
 ];
+const validatorGetItemById = [
+  check("id").exists().notEmpty().isMongoId(), //empty = vacio
 
-module.exports = { validatorCreateItem };
+  (req, res, next) => {
+    //tiene que responder si es error o no
+    return validatorResults(req, res, next);
+  },
+];
+module.exports = { validatorCreateItem, validatorGetItemById };
