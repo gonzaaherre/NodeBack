@@ -1,4 +1,6 @@
+const { matchedData } = require("express-validator");
 const { trackModel } = require("../models"); // Cambia a trackModel
+const { handlehttpError } = require("../utils/handleError");
 
 /**
  * obtener lista de la db
@@ -6,9 +8,13 @@ const { trackModel } = require("../models"); // Cambia a trackModel
  * @param {*} res
  */
 const getItems = async (req, res) => {
-  //si hay await hay async
-  const data = await trackModel.find({}); // Busca todas las pistas en la base de datos
-  res.send({ data }); // Envía los datos en la respuesta
+  try {
+    //si hay await hay async
+    const data = await trackModel.find({}); // Busca todas las pistas en la base de datos
+    res.send({ data }); // Envía los datos en la respuesta
+  } catch (e) {
+    handlehttpError(res, "ERROR_GET_ITEMS");
+  }
 };
 
 /**
@@ -24,10 +30,15 @@ const getItem = (req, res) => {};
  * @param {*} res
  */
 const createItem = async (req, res) => {
-  const { body } = req; // Extrae el cuerpo de la solicitud
-  console.log(body);
-  const data = await trackModel.create(body); // Crea un nuevo registro en la base de datos con los datos recibidos
-  res.send({ data }); // Envía los datos creados en la respuesta
+  try {
+    const body = matchedData(req);
+    const data = await trackModel.create(body);
+    console.log(body);
+    // Crea un nuevo registro en la base de datos con los datos recibidos
+    res.send({ data }); // Envía los datos creados en la respuesta
+  } catch (e) {
+    handlehttpError(res, "ERROR_CREATE_ITEMS");
+  }
 };
 
 /**
