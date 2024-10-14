@@ -81,7 +81,7 @@ const deleteItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await trackModel.deleteOne({ _id: id }); // Busca todas las pistas en la base de datos
+    const data = await trackModel.delete({ _id: id }); // Busca todas las pistas en la base de datos
     res.send({ data }); // Envía los datos en la respuesta
   } catch (e) {
     console.log(e);

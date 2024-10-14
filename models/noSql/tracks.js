@@ -1,6 +1,6 @@
 const mongoose = require("mongoose"); // Importamos mongoose
 const { validate } = require("./users"); // (No se usa en este código pero está importado)
-
+const mongooseDelete = require("mongoose-delete");
 const tracksSchema = new mongoose.Schema(
   {
     name: {
@@ -48,4 +48,5 @@ const tracksSchema = new mongoose.Schema(
   }
 );
 
+tracksSchema.plugin(mongooseDelete, { overrideMethods: "all" });
 module.exports = mongoose.model("tracks", tracksSchema); // Exportamos el esquema como un modelo llamado "tracks"

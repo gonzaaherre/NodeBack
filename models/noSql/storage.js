@@ -1,12 +1,14 @@
 const mongoose = require("mongoose"); // Importamos mongoose para definir un esquema
+const mongooseDelete = require("mongoose-delete");
 
 const StorageScheme = new mongoose.Schema(
   {
     URL: {
       type: String, // El campo `URL` es de tipo String
     },
-    fileName: {
+    filename: {
       type: String, // El campo `fileName` también es de tipo String
+      required: true, // El campo `fileName` es de tipo String
     },
   },
   {
@@ -15,4 +17,5 @@ const StorageScheme = new mongoose.Schema(
   }
 );
 
+StorageScheme.plugin(mongooseDelete, { overrideMethods: "all" });
 module.exports = mongoose.model("storage", StorageScheme); // Exportamos el esquema como un modelo de mongoose llamado "storage"
