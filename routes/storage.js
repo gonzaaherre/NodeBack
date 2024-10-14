@@ -17,8 +17,6 @@ router.get("/", getItems);
 router.get("/:id", validatorGetItemById, getItem);
 //crear un nuevo registro
 router.post("/", uploadMiddleware.single("myfile"), createItem);
-//actualizar
-router.put("/:id", uploadMiddleware.single("myfile"), updateItem);
 //eliminar
 router.delete("/:id", validatorGetItemById, deleteItem);
 
