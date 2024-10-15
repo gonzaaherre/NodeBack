@@ -15,6 +15,7 @@ const UserScheme = new mongoose.Schema(
     },
     password: {
       type: String, // Contraseña del usuario
+      select: false, // Evita que se devuelva la contraseña
     },
     role: {
       type: ["user", "admin"], // Solo puede ser 'user' o 'admin'

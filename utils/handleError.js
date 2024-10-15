@@ -1,5 +1,6 @@
-const handlehttpError = (res, message = "Algo sucedio", code = 403) => {
-  res.status(code);
-  res.send({ error: message });
+const handlehttpError = (res, error) => {
+  console.log("Error", error);
+  res.status(500);
+  res.send({ error: "ERROR" });
 };
 module.exports = { handlehttpError };
