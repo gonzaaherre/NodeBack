@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { authMiddleware } = require("../middleware/session");
 const {
   validatorCreateItem,
   validatorGetItemById,
@@ -14,7 +15,7 @@ const {
 //aca generamos la ruta de canciones metodo get post delete update
 
 //obtener una lista
-router.get("/", getItems);
+router.get("/", authMiddleware, getItems);
 //obtener track por id
 router.get("/:id", validatorGetItemById, getItem);
 //crear track

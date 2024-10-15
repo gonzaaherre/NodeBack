@@ -9,9 +9,10 @@ const { handlehttpError } = require("../utils/handleError");
  */
 const getItems = async (req, res) => {
   try {
+    const user = req.user;
     //si hay await hay async
     const data = await trackModel.find({}); // Busca todas las pistas en la base de datos
-    res.send({ data }); // Envía los datos en la respuesta
+    res.send({ data, user }); // Envía los datos en la respuesta
   } catch (e) {
     handlehttpError(res, "ERROR_GET_ITEMS");
   }
