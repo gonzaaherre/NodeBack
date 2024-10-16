@@ -2,7 +2,9 @@ require("dotenv").config(); // Carga las variables de entorno desde un archivo .
 const express = require("express"); // Importamos el framework Express
 const cors = require("cors"); // Importamos la librería CORS para gestionar la política de origen cruzado
 const app = express(); // Creamos una aplicación Express
-const dbConnect = require("./config/mongo"); // Importamos la función para conectar con MongoDB
+const dbConnectNoSql = require("./config/mongo"); // Importamos la función para conectar con MongoDB
+const { dbConnectMySql } = require("./config/mysql"); // Importamos la función para conectar con MySQL
+const ENGINE_DB = process.env.ENGINE_DB;
 
 app.use(cors()); // Permite solicitudes desde otros dominios (Cross-Origin Resource Sharing)
 app.use(express.json()); // Middleware que parsea el cuerpo de las peticiones en formato JSON
@@ -16,5 +18,4 @@ app.listen(port, () => {
   // Inicia el servidor en el puerto especificado
   console.log(`Servidor corriendo en http://localhost:${port}`);
 });
-
-dbConnect(); // Ejecuta la función para conectar con MongoDB
+ENGINE_DB === "nosql" ? dbConnectNoSql() : dbConnectMySql();
