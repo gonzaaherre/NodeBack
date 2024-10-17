@@ -38,19 +38,18 @@ const Tracks = sequelize.define(
     timestamps: true,
   }
 );
+// Definir relación belongsTo fuera de los métodos
+Tracks.belongsTo(storage, {
+  foreignKey: "mediaId",
+});
+
+// Método para obtener todas las pistas con su relación de storage
 Tracks.findAllData = function () {
-  //una cancion pertenece a un storage
-  Tracks.belongsTo(storage, {
-    foreignKey: "mediaId",
-  });
-  return Tracks.findAll({ include: storage }); //incluye la relacion que tiene con storage
+  return Tracks.findAll({ include: storage });
 };
 
+// Método para obtener una pista por ID con su relación de storage
 Tracks.findOneData = function (id) {
-  //una cancion pertenece a un storage
-  Tracks.belongsTo(storage, {
-    foreignKey: "mediaId",
-  });
-  return Tracks.findOneData({ where: { id }, include: storage }); //incluye la relacion que tiene con storage
+  return Tracks.findOne({ where: { id }, include: storage });
 };
 module.exports = Tracks;

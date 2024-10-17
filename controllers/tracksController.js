@@ -29,6 +29,9 @@ const getItem = async (req, res) => {
     req = matchedData(req);
     const { id } = req;
     const data = await trackModel.findOneData(id); // Busca todas las pistas en la base de datos
+    if (!data) {
+      return handlehttpError(res, "ITEM_NOT_FOUND");
+    }
     res.send({ data }); // Envía los datos en la respuesta
   } catch (e) {
     handlehttpError(res, e, "ERROR_GET_ITEM");
