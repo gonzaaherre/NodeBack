@@ -4,7 +4,7 @@ const validatorResults = require("../utils/handleValidator");
 //chequea que cada propiedad cuando se cree un item exista y no sea vacia
 
 const validatorGetItemById = [
-  check("id").exists().notEmpty().isMongoId(), //empty = vacio
+  check("id").exists().notEmpty(), //empty = vacio
 
   (req, res, next) => {
     //tiene que responder si es error o no

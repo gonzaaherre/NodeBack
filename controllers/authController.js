@@ -24,7 +24,8 @@ const RegistrerController = async (req, res) => {
     };
     res.send({ data }); //Devuelve el token y los datos del usuario (sin la contraseña) en la respuesta.
   } catch (error) {
-    handlehttpError(error, "error al registrar");
+    handlehttpError(res, "error al registrar");
+    console.log(error);
   }
 };
 
@@ -40,9 +41,7 @@ const loginController = async (req, res) => {
   try {
     req = matchedData(req);
     //Buscar usuario seleccionando solo los campos password, name, role, y email.
-    const user = await usersModel
-      .findOne({ email: req.email })
-      .select("password name role email");
+    const user = await usersModel.findOne({ email: req.email });
     if (!user) {
       handlehttpError(res, "usuario no existe");
       return;

@@ -12,10 +12,11 @@ const URL_PUBLIC = process.env.URL_PUBLIC;
 const getItems = async (req, res) => {
   try {
     //si hay await hay async
-    const data = await storageModel.find({}); // Busca todas las pistas en la base de datos
+    const data = await storageModel.findAll(); // Busca todas las pistas en la base de datos
     res.send({ data }); // Envía los datos en la respuesta
   } catch (e) {
-    handlehttpError(res, "ERROR_GET_ITEMS");
+    handlehttpError(res, "ERROR_GET_STORAGES");
+    console.log(e);
   }
 };
 
@@ -28,10 +29,11 @@ const getItem = async (req, res) => {
   try {
     //si hay await hay async
     const { id } = matchedData(req);
-    const data = await storageModel.findById(id); // Busca todas las pistas en la base de datos
+    const data = await storageModel.findByPk(id); // Busca todas las pistas en la base de datos
     res.send({ data }); // Envía los datos en la respuesta
   } catch (e) {
-    handlehttpError(res, "ERROR_GET_ITEM");
+    handlehttpError(res, "ERROR_GET_STORAGE");
+    console.log(e);
   }
 };
 
@@ -80,7 +82,7 @@ const deleteItem = async (req, res) => {
     const id = req.id;
 
     // Encuentra el archivo en la base de datos
-    const findMedia = await storageModel.findById(id);
+    const findMedia = await storageModel.findByPk(id);
     if (!findMedia) {
       return handlehttpError(res, "FILE_NOT_FOUND_IN_DB", 404);
     }
@@ -98,7 +100,9 @@ const deleteItem = async (req, res) => {
     }
 
     // Elimina el documento de la base de datos solo después de eliminar el archivo
-    await storageModel.findByIdAndDelete(id);
+    await storageModel.destroy({
+      where: { id }, // Filtrar por ID
+    });
 
     const data = {
       fileName,

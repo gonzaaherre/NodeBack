@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
+const getProperties = require("../utils/handlePropertiesEngine");
+const propertiesKey = getProperties();
 /**
  * hay que pasar lo que queremos ver del usuario
  * @param user
@@ -10,7 +12,8 @@ const tokenSign = async (user) => {
   //firmar el token
   const sign = jwt.sign(
     {
-      _id: user._id,
+      //para que se haga dinamico sin depender de que motor de db se usa
+      [propertiesKey.id]: user[propertiesKey.id],
       role: user.role,
     },
     JWT_SECRET,

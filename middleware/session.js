@@ -1,6 +1,8 @@
 const { handlehttpError } = require("../utils/handleError");
 const { verifyToken } = require("../utils/handleJWT");
 const { usersModel } = require("../models");
+const getProperties = require("../utils/handlePropertiesEngine");
+const propertiesKey = getProperties();
 const authMiddleware = async (req, res, next) => {
   try {
     // Verificamos que el encabezado 'authorization' esté presente
@@ -22,11 +24,15 @@ const authMiddleware = async (req, res, next) => {
     const dataToken = await verifyToken(token);
 
     // Si la verificación del token falla o no tiene un _id, lanzamos un error
-    if (!dataToken || !dataToken._id) {
+    if (!dataToken || !dataToken.id) {
       handlehttpError(res, "ERROR_ID_TOKEN");
       return;
     }
-    const user = await usersModel.findOne({ _id: dataToken._id });
+
+    const query = {
+      [propertiesKey.id]: dataToken[propertiesKey.id], //depende de si es relacional o no hace una busqueda
+    };
+    const user = await usersModel.findOne(query);
     req.user = user;
     // Si todo está bien, continuamos al siguiente middleware o controlador
     next();

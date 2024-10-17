@@ -13,7 +13,7 @@ const validatorCreateItem = [
   check("duration").exists().notEmpty(),
   check("duration.start").exists().notEmpty(),
   check("duration.end").exists().notEmpty(),
-  check("MediaId").exists().notEmpty().isMongoId(),
+  check("mediaId").exists().notEmpty(),
 
   (req, res, next) => {
     //tiene que responder si es error o no
@@ -22,7 +22,7 @@ const validatorCreateItem = [
   },
 ];
 const validatorGetItemById = [
-  check("id").exists().notEmpty().isMongoId(), //empty = vacio
+  check("id").exists().notEmpty(), //empty = vacio
 
   (req, res, next) => {
     //tiene que responder si es error o no

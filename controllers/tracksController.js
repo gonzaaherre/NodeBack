@@ -11,10 +11,11 @@ const getItems = async (req, res) => {
   try {
     const user = req.user;
     //si hay await hay async
-    const data = await trackModel.find({}); // Busca todas las pistas en la base de datos
+    const data = await trackModel.findAll(); // Busca todas las pistas en la base de datos
     res.send({ data, user }); // Envía los datos en la respuesta
   } catch (e) {
-    handlehttpError(res, "ERROR_GET_ITEMS");
+    handlehttpError(res, "ERROR_GET_TRACKS");
+    console.log(e);
   }
 };
 
@@ -27,7 +28,7 @@ const getItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await trackModel.findById(id); // Busca todas las pistas en la base de datos
+    const data = await trackModel.findByPk(id); // Busca todas las pistas en la base de datos
     res.send({ data }); // Envía los datos en la respuesta
   } catch {
     handlehttpError(res, "ERROR_GET_ITEM");
@@ -58,18 +59,18 @@ const createItem = async (req, res) => {
  */
 const updateItem = async (req, res) => {
   try {
-    const { id, ...body } = matchedData(req); //separa el id del body, quedando dos arreglos separados
-    // Actualiza el documento y devuelve el nuevo documento actualizado
-    const data = await trackModel.findOneAndUpdate(
-      { _id: id }, // Objeto de búsqueda, aquí se filtra por ID
-      body, // Campos que serán actualizados
-      { new: true } // Opción para devolver el documento actualizado
-    );
-    console.log(body);
-    // Crea un nuevo registro en la base de datos con los datos recibidos
-    res.send({ data }); // Envía los datos creados en la respuesta
+    const { id, ...restOfData } = matchedData(req); // Extrae el id y los datos restantes
+    const [updated] = await trackModel.update(restOfData, {
+      where: { id }, // Condición para actualizar
+    });
+
+    if (updated) {
+      const updatedTrack = await trackModel.findByPk(id); // Busca el track actualizado
+      return res.send({ data: updatedTrack });
+    }
+    handlehttpError(res, "ITEM_NOT_FOUND");
   } catch (e) {
-    handlehttpError(res, "ERROR_UPDATE_ITEMS");
+    handlehttpError(res, "ERROR_UPDATE_ITEM");
   }
 };
 
@@ -82,11 +83,11 @@ const deleteItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await trackModel.delete({ _id: id }); // Busca todas las pistas en la base de datos
+    const data = await trackModel.destroy({ where: { id } }); // Busca todas las pistas en la base de datos
     res.send({ data }); // Envía los datos en la respuesta
   } catch (e) {
     console.log(e);
-    handlehttpError(res, "ERROR_GET_ITEM");
+    handlehttpError(res, "ERROR_DELETE_ITEM");
   }
 };
 
