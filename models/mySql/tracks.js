@@ -1,5 +1,6 @@
 const { sequelize } = require("../../config/mysql");
 const { DataTypes } = require("sequelize");
+const storage = require("./storage");
 
 const Tracks = sequelize.define(
   "tracks",
@@ -37,5 +38,19 @@ const Tracks = sequelize.define(
     timestamps: true,
   }
 );
+Tracks.findAllData = function () {
+  //una cancion pertenece a un storage
+  Tracks.belongsTo(storage, {
+    foreignKey: "mediaId",
+  });
+  return Tracks.findAll({ include: storage }); //incluye la relacion que tiene con storage
+};
 
+Tracks.findOneData = function (id) {
+  //una cancion pertenece a un storage
+  Tracks.belongsTo(storage, {
+    foreignKey: "mediaId",
+  });
+  return Tracks.findOneData({ where: { id }, include: storage }); //incluye la relacion que tiene con storage
+};
 module.exports = Tracks;

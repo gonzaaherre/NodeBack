@@ -11,7 +11,7 @@ const getItems = async (req, res) => {
   try {
     const user = req.user;
     //si hay await hay async
-    const data = await trackModel.findAll(); // Busca todas las pistas en la base de datos
+    const data = await trackModel.findAllData(); // Busca todas las pistas en la base de datos
     res.send({ data, user }); // Envía los datos en la respuesta
   } catch (e) {
     handlehttpError(res, "ERROR_GET_TRACKS");
@@ -28,10 +28,10 @@ const getItem = async (req, res) => {
   try {
     req = matchedData(req);
     const { id } = req;
-    const data = await trackModel.findByPk(id); // Busca todas las pistas en la base de datos
+    const data = await trackModel.findOneData(id); // Busca todas las pistas en la base de datos
     res.send({ data }); // Envía los datos en la respuesta
-  } catch {
-    handlehttpError(res, "ERROR_GET_ITEM");
+  } catch (e) {
+    handlehttpError(res, e, "ERROR_GET_ITEM");
   }
 };
 
